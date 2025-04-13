@@ -4,7 +4,10 @@ from dotenv import load_dotenv
 import streamlit as st
 
 
-api_key = st.secrets.openai.OPENAI_API_KEY
+# Dictionary形式でSecretsから取得
+api_key = st.secrets["openai"]["OPENAI_API_KEY"]
+if not api_key:
+    raise ValueError("OPENAI_API_KEY が設定されていません。")
 client = openai.OpenAI(api_key=api_key)
 
 
