@@ -37,6 +37,7 @@ def suggest_ideas(want_title):
     want_title（やりたいことの名称）に対してAIサジェストする例。
     
     """
+    st.write(OPENAI_API_KEY)
     try:
         prompt = f"""
         私は「{want_title}」を実現したいと考えています。
