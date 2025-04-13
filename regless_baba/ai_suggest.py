@@ -2,16 +2,18 @@ import openai
 import os
 from dotenv import load_dotenv
 
+try:
+    # Streamlit Cloud 上なら st.secrets を使う
+    import streamlit as st
+    api_key = st.secrets["OPENAI_API_KEY"]
+except Exception:
+    # ローカル用に dotenv を使って環境変数を読む
+    from dotenv import load_dotenv
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
 
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-print("DEBUG: OPENAI_API_KEY =", api_key)
-
-if not api_key:
-    raise ValueError("OPENAI_API_KEY が設定されていません。")
-
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
+# クライアント初期化
+client = openai.OpenAI(api_key=api_key)
 
 # from openai import OpenAI # openAIのchatGPTのAIを活用するための機能をインポート
 # import os
