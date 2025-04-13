@@ -1,19 +1,12 @@
 import openai
 import os
 from dotenv import load_dotenv
+import streamlit as st
 
-try:
-    # Streamlit Cloud 上なら st.secrets を使う
-    import streamlit as st
-    api_key = st.secrets["OPENAI_API_KEY"]
-except Exception:
-    # ローカル用に dotenv を使って環境変数を読む
-    from dotenv import load_dotenv
-    load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY")
 
-# クライアント初期化
+api_key = st.secrets.openai.OPENAI_API_KEY
 client = openai.OpenAI(api_key=api_key)
+
 
 # from openai import OpenAI # openAIのchatGPTのAIを活用するための機能をインポート
 # import os
@@ -37,7 +30,6 @@ def suggest_ideas(want_title):
     want_title（やりたいことの名称）に対してAIサジェストする例。
     
     """
-    st.write(OPENAI_API_KEY)
     try:
         prompt = f"""
         私は「{want_title}」を実現したいと考えています。
