@@ -8,7 +8,7 @@ def main():
     st.set_page_config(page_title="RegLess") #ページタイトル
 
     # ロゴ画像のパスまたは URL を指定
-    logo_url = "regless_logo.png"
+    logo_url = "images/regless_logo.png"
 
     # HTML を使ってセンタリングして表示
     st.markdown(
