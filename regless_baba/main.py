@@ -5,6 +5,19 @@ import streamlit.components.v1 as components
 
 
 def main():
+    # ロゴ画像のパスまたは URL を指定
+    logo_url = "regless_logo.png"
+
+    # HTML を使ってセンタリングして表示
+    st.markdown(
+        f"""
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <img src="{logo_url}" alt="Logo" style="max-width: 50%; height: auto;">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.set_page_config(page_title="RegLess") #ページタイトル
     st.header("")
 
