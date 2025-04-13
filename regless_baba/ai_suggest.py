@@ -1,20 +1,27 @@
-from openai import OpenAI # openAIのchatGPTのAIを活用するための機能をインポート
+import openai
 import os
-from dotenv import load_dotenv  # pip install python-dotenv
-
-# .env を読み込む
+from dotenv import load_dotenv
 load_dotenv()
 
-# 環境変数から OpenAI API キーを取得
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    raise ValueError("OPENAI_API_KEY が設定されていません。")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# APIキーを明示的に渡して OpenAI クライアントを生成する
-client = OpenAI(api_key=api_key)
 
-# 必要に応じて openai.api_key = "YOUR_API_KEY" を設定するか、
-# 環境変数 OPENAI_API_KEY にキーを登録してください
+# from openai import OpenAI # openAIのchatGPTのAIを活用するための機能をインポート
+# import os
+# from dotenv import load_dotenv  # pip install python-dotenv
+
+# # .env を読み込む
+# load_dotenv()
+
+# # 環境変数から OpenAI API キーを取得
+# api_key = os.getenv("OPENAI_API_KEY")
+# if not api_key:
+#     raise ValueError("OPENAI_API_KEY が設定されていません。")
+
+# # APIキーを明示的に渡して OpenAI クライアントを生成する
+# client = OpenAI(api_key=api_key)
+
+
 
 def suggest_ideas(want_title):
     """
