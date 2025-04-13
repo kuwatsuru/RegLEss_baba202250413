@@ -5,6 +5,8 @@ import streamlit.components.v1 as components
 
 
 def main():
+    st.set_page_config(page_title="RegLess") #ページタイトル
+
     # ロゴ画像のパスまたは URL を指定
     logo_url = "regless_logo.png"
 
@@ -18,8 +20,7 @@ def main():
         unsafe_allow_html=True
     )
 
-    st.set_page_config(page_title="RegLess") #ページタイトル
-    st.header("")
+    st.write("")
 
     components.html(
     """
