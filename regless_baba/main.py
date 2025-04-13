@@ -11,7 +11,6 @@ def main():
     image = Image.open("regless_baba/images/regless_logo.png")
     st.image(image, use_container_width=False, width=200)  # widthでサイズ調整
 
-    st.write("")
 
     components.html(
     """
@@ -25,11 +24,37 @@ def main():
     
     components.html(
     """
-    <div style='text-align: center;'>
-        <p>
-            <span style='color:black ; font-size: 32px; font-family: Train One''>- 残された時間に 後悔のない毎日を -</span>
-        </p>
-    </div>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet">
+        <style>
+            @keyframes fadeInUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .fade-in-text {
+                font-family: 'Noto Sans JP', sans-serif;
+                font-size: 36px;
+                font-weight: 500;
+                color: #333;
+                text-align: center;
+                animation: fadeInUp 1.2s ease-out both;
+                margin-top: 0px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="fade-in-text">
+            - 残された時間に 後悔のない毎日を -
+        </div>
+    </body>
     """
 )
     
