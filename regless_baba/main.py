@@ -8,7 +8,7 @@ def main():
     st.set_page_config(page_title="RegLess") #ページタイトル
 
 #ロゴ表示
-    image = Image.open("images/regless_logo.png")
+    image = Image.open("regless_baba/images/regless_logo.png")
     st.image(image, use_container_width=False, width=500)  # widthでサイズ調整
 
     st.write("")
