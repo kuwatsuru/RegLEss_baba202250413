@@ -1,5 +1,5 @@
 import streamlit as st
-from db import get_wants_by_tag, add_like, get_likes_count
+from db import get_wants_by_tag, get_all_wants, add_like, get_likes_count
 
 def app():
     st.set_page_config(page_title="RegLess")
@@ -12,7 +12,7 @@ def app():
         st.session_state.search_result = None
 
     search_tag = st.text_input("検索したいタグを入力（例：旅行、勉強など）", st.session_state.search_tag)
-    
+
     # ボタンを横並びに配置
     col1, col2 = st.columns(2)
     

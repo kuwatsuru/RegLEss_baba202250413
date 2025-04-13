@@ -147,3 +147,8 @@ def get_likes_count(want_id):
     count = c.fetchone()[0]
     conn.close()
     return count
+
+def get_all_wants():
+    query = "SELECT * FROM wants"
+    # データベースコネクションやカーソルを利用した処理を実装
+    ...
