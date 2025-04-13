@@ -1,41 +1,32 @@
 import streamlit as st
 from db import init_db
 import streamlit.components.v1 as components
-
+from PIL import Image
 
 
 def main():
     st.set_page_config(page_title="RegLess") #ページタイトル
 
-    # ロゴ画像のパスまたは URL を指定
-    logo_url = "images/regless_logo.png"
-
-    # HTML を使ってセンタリングして表示
-    st.markdown(
-        f"""
-        <div style="display: flex; justify-content: center; align-items: center;">
-            <img src="{logo_url}" alt="Logo" style="max-width: 50%; height: auto;">
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+#ロゴ表示
+    image = Image.open("images/regless_logo.png")
+    st.image(image, use_container_width=False, width=500)  # widthでサイズ調整
 
     st.write("")
 
+#     components.html(
+#     """
+#     <div style='text-align: center;'>
+#         <p>
+#             <span style='color:black ; font-size: 100px; font-family: Courier''>RegLess</span>
+#         </p>
+#     </div>
+#     """
+# )
     components.html(
     """
     <div style='text-align: center;'>
         <p>
-            <span style='color:black ; font-size: 100px; font-family: Courier''>RegLess</span>
-        </p>
-    </div>
-    """
-)
-    components.html(
-    """
-    <div style='text-align: center;'>
-        <p>
-            <span style='color:black ; font-size: 32px; font-family: Yu Mincho''>- 残された時間に 後悔のない毎日を -</span>
+            <span style='color:black ; font-size: 32px; font-family: Train One''>- 残された時間に 後悔のない毎日を -</span>
         </p>
     </div>
     """
