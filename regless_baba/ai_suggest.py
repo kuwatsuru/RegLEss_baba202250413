@@ -1,7 +1,14 @@
 import openai
 import os
 from dotenv import load_dotenv
+
+
 load_dotenv()
+api_key = os.getenv("OPENAI_API_KEY")
+print("DEBUG: OPENAI_API_KEY =", api_key)
+
+if not api_key:
+    raise ValueError("OPENAI_API_KEY が設定されていません。")
 
 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
