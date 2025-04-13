@@ -9,19 +9,20 @@ def main():
 
 #ロゴ表示
     image = Image.open("regless_baba/images/regless_logo.png")
-    st.image(image, use_container_width=False, width=500)  # widthでサイズ調整
+    st.image(image, use_container_width=False, width=200)  # widthでサイズ調整
 
     st.write("")
 
-#     components.html(
-#     """
-#     <div style='text-align: center;'>
-#         <p>
-#             <span style='color:black ; font-size: 100px; font-family: Courier''>RegLess</span>
-#         </p>
-#     </div>
-#     """
-# )
+    components.html(
+    """
+    <div style='text-align: center;'>
+        <p>
+            <span style='color:black ; font-size: 100px; font-family: Courier''>RegLess</span>
+        </p>
+    </div>
+    """
+)
+    
     components.html(
     """
     <div style='text-align: center;'>
