@@ -3,6 +3,7 @@ pandas
 openai
 python-dotenv
 Pillow
+supabase
 streamlit>=1.32
-openai>=1.0
+openai==1.72.0
 python-dotenv>=1.0
