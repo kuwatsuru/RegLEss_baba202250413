@@ -23,7 +23,8 @@ def app():
             st.error("ユーザーが見つかりません。")
             return
         
-        user_id = user_data[0]
+        user_id = user_data["id"]
+        st.write(f"ユーザー名: {user_data['username']}")
         wants_list = get_wants_by_user(user_id)
 
         if not wants_list:
@@ -34,17 +35,15 @@ def app():
             completed_count = 0
 
             for want in wants_list:
-                want_id = want[0]
-                user_id_fk = want[1]
-                title = want[2]
-                cost = want[3]
-                period = want[4]
-                first_step = want[5]
-                tag = want[6]
-                deadline = want[7]
-                is_completed = want[8]
+                want_id = want["id"]
+                title = want["title"]
+                cost = want["cost"]
+                period = want["period"]
+                first_step = want["first_step"]
+                tag = want["tag"]
+                deadline = want["deadline"]
+                is_completed = want["is_completed"]
 
-                # 完了ボタンを含むレイアウト
                 col1, col2, col3 = st.columns([2, 1, 1])
                 with col1:
                     st.write(f"**{title}**")
@@ -59,7 +58,7 @@ def app():
                     if not is_completed:
                         if st.button("完了", key=f"complete_{want_id}"):
                             complete_want(want_id)
-                            st.success(f"{title}完了にしますか？")
+                            st.success(f"{title} を完了にしますか？")
                     else:
                         st.write("完了済み")
 
@@ -72,7 +71,7 @@ def app():
             st.write(f"完了率: {completion_ratio * 100:.1f}%")
             
             # ユーザーの残り寿命（カラム順に依存）
-            estimated_lifespan = user_data[8]
+            estimated_lifespan = user_data["estimated_lifespan"]
             st.write(f"推定残り寿命: {estimated_lifespan}年")
 
 if __name__ == "__main__":

@@ -13,31 +13,29 @@ def calculate_remaining_life(birthdate, smoking, drinking, exercise, body_shape)
     age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
 
     # 2. 仮ロジック：生活習慣による加減
-    #    ここでは単純なポイント方式で寿命を加減してみる
+    #    アンケート内容に基づいて計算
     life_points = 84  # 日本人の平均寿命
     if smoking == "ほぼ毎日":
-        life_points -= 5
+        life_points *= 0.90
     elif smoking == "たまに":
-        life_points -= 2
+        life_points *= 0.96
 
     if drinking == "ほぼ毎日":
-        life_points -= 3
+        life_points *= 0.94
     elif drinking == "たまに":
-        life_points -= 1
+        life_points *= 0.98
 
     if exercise == "定期的にする":
-        life_points += 3
+        life_points *= 1.06
     elif exercise == "不定期":
-        life_points += 1
+        life_points *= 1.02
 
     if body_shape == "肥満":
-        life_points -= 3
+        life_points *= 0.94
     elif body_shape == "やせ型":
-        life_points -= 1
+        life_points *= 0.98
 
     # 3. 実際の年齢を引いて残り寿命をざっくり計算
     remaining = life_points - age
 
-    return max(remaining, 0)  # 0を下回らないようにする
-
-#寿命計算は　マイナスではなく0.95×とかでもいいかも。
+    return max(int(round(remaining)), 0)  # マイナスにならないように

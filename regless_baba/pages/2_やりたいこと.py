@@ -39,7 +39,7 @@ def app():
         if user_data is None:
             st.error("ユーザーが存在しません。先にユーザー登録を行ってください。")
         else:
-            user_id = user_data[0]  # user_idはfetch結果の1列目
+            user_id = user_data["id"]
             insert_want(
                 user_id=user_id,
                 title=want_title,

@@ -1,154 +1,155 @@
-import sqlite3
+import os
+import streamlit as st
+from supabase import create_client, Client
 
-DB_NAME = "regless.db"
+#Supabaseから読み込み　
+#！！あとで環境変数に変える
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://wuejzdybeozqzzhopdgy.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "APIキーを入れる")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+#データベースの操作に関わる関数を定義
 
 def init_db():
     """
     アプリ起動時にDBを初期化する。
-    テーブルがなければ作成するイメージ。
+    接続確認用。
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
+    try:
+        result = supabase.table("users").select("id").limit(1).execute()
+        st.success("✅ Supabaseへの接続成功")
+        return True
+    except Exception as e:
+        st.error(f"❌ Supabase接続エラー: {e}")
+        return False
 
-    # ユーザーテーブル（仮のログイン用カラムなどを含む）
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            birthdate TEXT,
-            smoking TEXT,
-            drinking TEXT,
-            exercise TEXT,
-            body_shape TEXT,
-            estimated_lifespan INTEGER
-        )
-    ''')
-
-    # やりたいことテーブル
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS wants (
-            want_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            title TEXT NOT NULL,
-            cost INTEGER,
-            period TEXT,
-            first_step TEXT,
-            tag TEXT,
-            deadline TEXT,
-            is_completed INTEGER DEFAULT 0,
-            FOREIGN KEY(user_id) REFERENCES users(user_id)
-        )
-    ''')
-
-    # 他人のやりたいことにLikeを付けるための例示テーブル
-    c.execute('''
-        CREATE TABLE IF NOT EXISTS likes (
-            like_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            want_id INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(user_id),
-            FOREIGN KEY(want_id) REFERENCES wants(want_id)
-        )
-    ''')
-
-    conn.commit()
-    conn.close()
-
-def insert_user(username, password, birthdate, smoking, drinking, exercise, body_shape, estimated_lifespan):
+def insert_user(username, birthdate, smoking, drinking, exercise, body_shape, estimated_lifespan):
     """
     ユーザーをDBに登録する処理
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('''
-        INSERT INTO users (username, password, birthdate, smoking, drinking, exercise, body_shape, estimated_lifespan)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (username, password, birthdate, smoking, drinking, exercise, body_shape, estimated_lifespan))
-    conn.commit()
-    conn.close()
+    try:
+        data = {
+            "username": username,
+            "birthdate": birthdate,
+            "smoking": smoking,
+            "drinking": drinking,
+            "exercise": exercise,
+            "body_shape": body_shape,
+            "estimated_lifespan": estimated_lifespan
+        }
+        result = supabase.table("users").insert(data).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        print(f"ユーザー登録エラー: {e}") 
+        return None  
+
 
 def get_user_by_username(username):
     """
     usernameでユーザーを検索し、そのユーザー情報を返す
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('SELECT * FROM users WHERE username=?', (username,))
-    user = c.fetchone()
-    conn.close()
-    return user
+    try:
+        result = supabase.table('users').select('*').eq('username', username).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        st.write(f"ユーザー検索エラー: {e}")
+        return None
+
 
 def insert_want(user_id, title, cost, period, first_step, tag, deadline):
     """
     やりたいことをDBに登録する処理
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('''
-        INSERT INTO wants (user_id, title, cost, period, first_step, tag, deadline)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-    ''', (user_id, title, cost, period, first_step, tag, deadline))
-    conn.commit()
-    conn.close()
+    try:
+        data = {
+            "user_id": user_id,
+            "title": title,
+            "cost": cost,
+            "period": period,
+            "first_step": first_step,
+            "tag": tag,
+            "deadline": deadline,
+            "is_completed": False  # SupabaseではBoolを設定
+        }
+        result = supabase.table('wants').insert(data).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        print(f"やりたいこと登録エラー: {e}")
+        return None
+
 
 def get_wants_by_user(user_id):
     """
     ユーザーのやりたいことをすべて取得
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('SELECT * FROM wants WHERE user_id=?', (user_id,))
-    wants_list = c.fetchall()
-    conn.close()
-    return wants_list
+    try:
+        result = supabase.table('wants').select('*').eq('user_id', user_id).execute()
+        return result.data
+    except Exception as e:
+        print(f"やりたいこと取得エラー: {e}")
+        return []
+
 
 def complete_want(want_id):
     """
     やりたいことを完了状態に更新
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('UPDATE wants SET is_completed=1 WHERE want_id=?', (want_id,))
-    conn.commit()
-    conn.close()
+    try:
+        result = supabase.table('wants').update({"is_completed": True}).eq('id', want_id).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        print(f"やりたいこと更新エラー: {e}")
+        return None
+
 
 def get_wants_by_tag(tag):
     """
     タグで検索してやりたいことリストを取得する
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    # タグを部分一致や完全一致にするかは方針次第。ここでは部分一致
-    c.execute('SELECT * FROM wants WHERE tag LIKE ?', ('%' + tag + '%',))
-    result = c.fetchall()
-    conn.close()
-    return result
+    try:
+        # Supabaseでは LIKE の代わりに ilike を使用
+        result = supabase.table('wants').select('*').ilike('tag', f"%{tag}%").execute()
+        return result.data
+    except Exception as e:
+        print(f"タグ検索エラー: {e}")
+        return []
+
 
 def add_like(user_id, want_id):
     """
     他人のやりたいことにLikeを追加
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('''
-        INSERT INTO likes (user_id, want_id) VALUES (?, ?)
-    ''', (user_id, want_id))
-    conn.commit()
-    conn.close()
+    try:
+        data = {
+            "user_id": user_id,
+            "want_id": want_id
+        }
+        result = supabase.table('likes').insert(data).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        print(f"Like追加エラー: {e}")
+        return None
+
 
 def get_likes_count(want_id):
     """
     指定のやりたいことに対するLike数を取得
     """
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('SELECT COUNT(*) FROM likes WHERE want_id=?', (want_id,))
-    count = c.fetchone()[0]
-    conn.close()
-    return count
+    try:
+        result = supabase.table('likes').select('*', count='exact').eq('want_id', want_id).execute()
+        return result.count
+    except Exception as e:
+        print(f"Like数取得エラー: {e}")
+        return 0
+
 
 def get_all_wants():
-    query = "SELECT * FROM wants"
-    # データベースコネクションやカーソルを利用した処理を実装
-    ...
+    """
+    全てのやりたいことを取得
+    """
+    try:
+        result = supabase.table('wants').select('*').execute()
+        return result.data
+    except Exception as e:
+        print(f"全やりたいこと取得エラー: {e}")
+        return []

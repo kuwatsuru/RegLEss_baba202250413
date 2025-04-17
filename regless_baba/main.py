@@ -7,10 +7,13 @@ from PIL import Image
 def main():
     st.set_page_config(page_title="RegLess") #ページタイトル
 
-#ロゴ表示
-    image = Image.open("regless_baba/images/regless_logo.png")
-    st.image(image, use_container_width=False, width=200)  # widthでサイズ調整
+##ロゴ表示（デプロイ時）
+#    image = Image.open("regless_baba\images\regless_logo.png")
 
+#ロゴ表示（ローカルの時）
+    image = Image.open(r"D:\UserDATA\DN30665\OneDrive - NAGASE Group\Documents\0.ドキュメント\6．自己研鑽\プログラミング_202501\githubクローン\regless_baba\images\regless_logo.png")
+
+    st.image(image, use_container_width=False, width=200)  # widthでサイズ調整
 
     components.html(
     """
