@@ -1,12 +1,11 @@
 import os
 import streamlit as st
 from supabase import create_client, Client
+from pages.utils import get_supabase_client
 
-#Supabaseから読み込み　
-#！！あとで環境変数に変える
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://wuejzdybeozqzzhopdgy.supabase.co")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "APIキーを入れる")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# Supabase クライアントを取得（キャッシュリソース）
+supabase = get_supabase_client()
 
 #データベースの操作に関わる関数を定義
 
