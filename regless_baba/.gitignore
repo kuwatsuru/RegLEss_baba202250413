@@ -1,3 +1,6 @@
 .env
 db_backup_sql.py
 regless.db
+*.toml
+*.pyc
+__pycache__/
