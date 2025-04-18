@@ -1,7 +1,7 @@
 import os
 import streamlit as st
 from supabase import create_client, Client
-from pages.utils import get_supabase_client
+from utils import get_supabase_client
 
 
 # Supabase クライアントを取得（キャッシュリソース）

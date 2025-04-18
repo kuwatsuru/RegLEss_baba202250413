@@ -2,7 +2,7 @@ import openai
 import os
 from dotenv import load_dotenv
 import streamlit as st
-from pages.utils import get_secret
+from utils import get_secret
 
 # # デプロイ時はこっち
 # # Dictionary形式でSecretsから取得
