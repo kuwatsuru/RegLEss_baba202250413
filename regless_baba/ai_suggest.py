@@ -2,6 +2,7 @@ import openai
 import os
 from dotenv import load_dotenv
 import streamlit as st
+from pages.utils import get_secret
 
 # # デプロイ時はこっち
 # # Dictionary形式でSecretsから取得
@@ -9,22 +10,13 @@ import streamlit as st
 # if not api_key:
 #     raise ValueError("OPENAI_API_KEY が設定されていません。")
 
-# ローカル時：.env を読み込む
-load_dotenv()
-# 環境変数から OpenAI API キーを取得
-api_key = os.getenv("OPENAI_API_KEY")
+# APIキーを環境（st.secrets or .env）から一元取得
+api_key = get_secret("openai", "api_key")
 if not api_key:
     raise ValueError("OPENAI_API_KEY が設定されていません。")
 
-
-# APIキーを明示的に渡して OpenAI クライアントを生成する
+# OpenAI クライアントを生成
 client = openai.OpenAI(api_key=api_key)
-
-
-
-
-
-
 
 
 def suggest_ideas(want_title):
@@ -44,7 +36,7 @@ def suggest_ideas(want_title):
 
         費用: ○○
         期間: △△
-        最初のステップ: □□ / xx / ☆☆
+        最初のステップ: □□ / xx /・・・
         """
         response = client.chat.completions.create(
             model="gpt-4o-mini",
@@ -56,7 +48,7 @@ def suggest_ideas(want_title):
             temperature=0.7
         )
 
-        # ChatCompletion API のレスポンスから返答内容を取得
+        # レスポンスから文章部分を抽出
         suggestion_text = response.choices[0].message.content.strip()
         return suggestion_text
     except Exception as e:
