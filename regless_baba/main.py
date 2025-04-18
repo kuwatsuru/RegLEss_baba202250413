@@ -1,21 +1,24 @@
 import streamlit as st
+import os
+from PIL import Image
+import streamlit.components.v1 as components
+from db import init_db
+
+# ページ設定は最初に一度だけ
 st.set_page_config(page_title="RegLess")
 
 
-from db import init_db
-import streamlit.components.v1 as components
-from PIL import Image
-
-
-
 def main():
+    # スクリプトファイルの所在ディレクトリを基準に画像パスを解決
+    base_dir = os.path.dirname(__file__)
+    image_path = os.path.join(base_dir, "images", "regless_logo.png")
 
-    # ロゴ表示（ローカル／デプロイ兼用）
+    # ロゴ表示
     try:
-        image = Image.open("images/regless_logo.png")
+        image = Image.open(image_path)
+        st.image(image, use_container_width=False, width=200)
     except FileNotFoundError:
-        image = Image.open(r"D:\UserDATA\DN30665\OneDrive - NAGASE Group\Documents\0.ドキュメント\6．自己研鑽\プログラミング_202501\githubクローン\regless_baba\images\regless_logo.png")
-    st.image(image, use_container_width=False, width=200)
+        st.error(f"ロゴ画像が見つかりません: {image_path}") #エラー時のメッセージ追加
 
     # 大見出し
     components.html(
