@@ -9,7 +9,7 @@ def app():
     # ─── 1. ログイン済みユーザーを取得 ───
     current_user = get_current_user()
     if current_user is None:
-        st.warning("まずはログインしてください。")
+        st.warning("Homeからログインしてください。")
         return
     
     #ユーザーネーム定義して、挨拶

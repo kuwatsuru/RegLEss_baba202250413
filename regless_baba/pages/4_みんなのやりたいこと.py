@@ -8,7 +8,7 @@ def app():
     
     current_user = get_current_user()
     if current_user is None:
-        st.warning("ログインしてください。")
+        st.warning("Homeからログインしてください。")
         return
 
     user_id = current_user["id"]  # ← UUIDとして取得できる
