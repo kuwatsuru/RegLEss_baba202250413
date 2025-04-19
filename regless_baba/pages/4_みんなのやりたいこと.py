@@ -1,5 +1,5 @@
 import streamlit as st
-from db import get_wants_by_tag, get_all_wants, add_like, get_likes_count
+from db import get_wants_by_tag, get_all_wants, add_like, get_likes_count, has_liked, remove_like
 from auth import get_current_user  # ログイン済みのユーザー取得
 
 def app():
@@ -52,25 +52,28 @@ def app():
     if st.session_state.search_result:
         for want in st.session_state.search_result:
             want_id = want["id"]
-            title = want["title"]
-            tag = want["tag"]
-            deadline = want["deadline"]
-            # ここで必要な情報を取得
-            # 例: cost, period, first_step など
-            st.write(f"**{title}** (タグ: {tag}, 締切: {deadline})")
-            like_count = get_likes_count(want_id)
-            st.write(f"Like数: {like_count}")
+            st.write(f"**{want['title']}** (タグ: {want['tag']}, 締切: {want['deadline']})")
+            st.write(f"👍Like数: {get_likes_count(want_id)}")
+   
+            # －－－－－－－－ここから変更－－－－－－－－
+            if has_liked(user_id, want_id):
+                # すでにLike済みなら非活性ボタン or テキスト表示
+                st.button("👍 Liked", key=f"liked_{want_id}", disabled=True)
+            else:
+                # 未Likeならボタンを出して、押されたら add_like
+                if st.button("Like !", key=f"like_{want_id}"):
+                    add_like(user_id, want_id)
+                    st.success("Likeを付けました 🎉")
+                    # リフレッシュ
+                    if st.session_state.search_tag:
+                        st.session_state.search_result = get_wants_by_tag(st.session_state.search_tag)
+                    else:
+                        st.session_state.search_result = get_all_wants()
+                    # **ここで即時リロードして、更新後の search_result を再描画**
+                    st.rerun()
+            # －－－－－－－－ここまで変更－－－－－－－－
+            st.write("")
 
-            # Like ボタン（ユーザーIDは固定値: 1 を使用）
-            if st.button(f"Like !", key=f"like_{want_id}"):
-                add_like(user_id, want_id)
-                st.success("Likeを付けました")
-                # Like後に表示内容を再取得して更新
-                # ※フィルタ条件がタグ検索の場合はそのまま、全件の場合も条件が空になるので問題ありません
-                if st.session_state.search_tag:
-                    st.session_state.search_result = get_wants_by_tag(st.session_state.search_tag)
-                else:
-                    st.session_state.search_result = get_all_wants()
 
 if __name__ == "__main__":
     app()

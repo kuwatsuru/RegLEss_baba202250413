@@ -152,3 +152,25 @@ def get_all_wants():
     except Exception as e:
         print(f"全やりたいこと取得エラー: {e}")
         return []
+
+
+# －－－－－－－－追加－－－－－－－－
+def has_liked(user_id: str, want_id: int) -> bool:
+    """そのユーザーが既に like を付けているか"""
+    resp = supabase.table("likes") \
+        .select("id", count="exact") \
+        .eq("want_id", want_id) \
+        .eq("user_id", user_id) \
+        .execute()
+    return (resp.count or 0) > 0
+
+
+def remove_like(user_id: str, want_id: int):
+    """
+    いいねを取り消し（削除）
+    """
+    return supabase.table("likes") \
+        .delete() \
+        .eq("user_id", user_id) \
+        .eq("want_id", want_id) \
+        .execute()
