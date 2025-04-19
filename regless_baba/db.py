@@ -16,7 +16,7 @@ def init_db():
     """
     try:
         result = supabase.table("users").select("id").limit(1).execute()
-        st.success("✅ Supabaseへの接続成功")
+        st.write("")
         return True
     except Exception as e:
         st.error(f"❌ Supabase接続エラー: {e}")
