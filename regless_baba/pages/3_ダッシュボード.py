@@ -1,5 +1,5 @@
 import streamlit as st
-from db import get_user_by_username, get_wants_by_user, complete_want
+from db import get_user_by_username, get_wants_by_user, complete_want, update_want
 
 def app():
     st.set_page_config(page_title="RegLess")
@@ -48,10 +48,40 @@ def app():
                 with col1:
                     st.write(f"**{title}**")
                     st.write(f"期限: {deadline}")
-                    st.write(f"費用：{cost}円")
+                    st.write(f"費用：{cost}万円")
                     st.write(f"期間：{period}")
                     st.write(f"1stステップ：{first_step}")
                     st.write(f"タグ: {tag}")
+                if st.button("編集", key=f"edit_{want_id}"):
+                    st.session_state[f"edit_mode_{want_id}"] = True
+
+                if st.session_state.get(f"edit_mode_{want_id}", False):
+                    new_title = st.text_input("タイトル", value=title, key=f"new_title_{want_id}")
+                    new_cost = st.text_input("費用", value=cost, key=f"new_cost_{want_id}")
+                    new_period = st.text_input("期間", value=period, key=f"new_period_{want_id}")
+                    new_first_step = st.text_area("1stステップ", value=first_step, key=f"new_step_{want_id}")
+                    new_tag = st.text_input("タグ", value=tag, key=f"new_tag_{want_id}")
+
+                    if st.button("保存する", key=f"save_{want_id}"):
+                        from db import update_want  # 🔁 忘れずにインポートしておく
+
+                        update_result = update_want(
+                            want_id=want_id,
+                            updates={
+                                "title": new_title,
+                                "cost": new_cost,
+                                "period": new_period,
+                                "first_step": new_first_step,
+                                "tag": new_tag
+                            }
+                        )
+                        if update_result:
+                            st.success("やりたいことを更新しました")
+                            st.session_state[f"edit_mode_{want_id}"] = False
+                            st.rerun()
+                        else:
+                            st.error("更新に失敗しました")
+                
                 with col2:
                     st.progress(1.0 if is_completed else 0.0)
                 with col3:

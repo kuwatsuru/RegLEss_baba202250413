@@ -152,3 +152,15 @@ def get_all_wants():
     except Exception as e:
         print(f"全やりたいこと取得エラー: {e}")
         return []
+    
+def update_want(want_id, updates):
+    """
+    やりたいことを更新する処理
+    """
+    try:
+        result = supabase.table('wants').update(updates).eq('id', want_id).execute()
+        return result.data[0] if result.data else None
+    except Exception as e:
+        print(f"更新エラー: {e}")
+        return None
+
