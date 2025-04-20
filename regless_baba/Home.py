@@ -65,7 +65,7 @@ def main():
 
     #　自動ログアウト設定
     if "login_time" in st.session_state:
-        elapsed = datetime.now() - st.session_state["login_time"]
+        elapsed = datetime.datetime.now() - st.session_state["login_time"]
         if elapsed.total_seconds() > SESSION_TIMEOUT_MINUTES * 60:
             logout()
             st.session_state.clear()
@@ -102,7 +102,7 @@ def main():
                     if success:
                         # セッションにユーザー情報を保存
                         st.session_state["user"] = result
-                        st.session_state["login_time"] = datetime.now() 
+                        st.session_state["login_time"] = datetime.datetime.now() 
                         st.success("ログインしました！")
                         st.rerun()  # ページをリロード
                     else:
@@ -137,19 +137,7 @@ def main():
                 min_value=0,    
                 value=st.session_state.get("estimated_life", 84)
             )
-            
 
-            # # 残り寿命の計算と表示（既存のコードを活用）
-            # if "estimated_life" in st.session_state:
-            #     estimated_life = st.session_state.estimated_life
-            # else:
-            #     estimated_life = 84  # デフォルト値
-            
-            # estimated_life_input = st.number_input(
-            #     "推定寿命（年）",
-            #     min_value=0,
-            #     value=estimated_life
-            # )
             
             if st.button("登録する", key="signup_button"):
                 if not email or not password or not username:
