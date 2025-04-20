@@ -102,7 +102,7 @@ def main():
                     if success:
                         # セッションにユーザー情報を保存
                         st.session_state["user"] = result
-                        st.session_state["login_time"] = datetime.now()  # ← 追加
+                        st.session_state["login_time"] = datetime.now() 
                         st.success("ログインしました！")
                         st.rerun()  # ページをリロード
                     else:
