@@ -1,16 +1,24 @@
 import streamlit as st
 from db import insert_want, get_user_by_username
-from ai_suggest import suggest_ideas
+from ai_suggest import suggest_ideas, suggest_ideas_with_all_users_rag
 from datetime import date, timedelta #期限設定用
+from auth import get_current_user
 
 def app():
 
     st.set_page_config(page_title="RegLess")
     st.header("やりたいこと登録")
 
-    # 暫定的にユーザー名を入力して、そのユーザーIDを取得する仕組み
-    # 実際にはログインしてセッションからユーザーIDを取得するのが望ましい
-    username = st.text_input("登録済みのユーザー名を入力してください")
+    # ─── 1. ログイン済みユーザーを取得 ───
+    current_user = get_current_user()
+    if current_user is None:
+        st.warning("Homeからログインしてください。")
+        return
+    
+    #ユーザーネーム定義して、挨拶
+    user_id = current_user["id"]
+    username = current_user["username"]
+    st.write(f"こんにちは、{username}さん")
 
     want_title = st.text_input("やりたいこと", "")
     cost = None
@@ -22,7 +30,7 @@ def app():
         if not want_title:
             st.warning("やりたいことを入力してください。")
         else:
-            suggestion = suggest_ideas(want_title)
+            suggestion = suggest_ideas_with_all_users_rag(want_title) #RAGを持たせた
             st.write("**AIサジェスト結果**:")
             st.write(suggestion)
 
@@ -35,11 +43,8 @@ def app():
     deadline = st.date_input("目標期限", date.today() + timedelta(days=365), key="deadline")
 
     if st.button("登録する"):
-        user_data = get_user_by_username(username)
-        if user_data is None:
-            st.error("ユーザーが存在しません。先にユーザー登録を行ってください。")
-        else:
-            user_id = user_data["id"]
+        if current_user:  # 現在ログイン中のユーザーのIDを使用
+            user_id = current_user['id']
             insert_want(
                 user_id=user_id,
                 title=want_title,
@@ -50,6 +55,9 @@ def app():
                 deadline=str(deadline)
             )
             st.success("やりたいことを登録しました！")
+        else:
+            st.error("ログイン情報がありません。もう一度ログインしてください。")
+
 
 def run():
     app()

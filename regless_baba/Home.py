@@ -60,6 +60,19 @@ def main():
     # 既にログイン済みかチェック
     current_user = get_current_user()
     
+    # ログアウト時間の設定
+    SESSION_TIMEOUT_MINUTES = 15
+
+    #　自動ログアウト設定
+    if "login_time" in st.session_state:
+        elapsed = datetime.now() - st.session_state["login_time"]
+        if elapsed.total_seconds() > SESSION_TIMEOUT_MINUTES * 60:
+            logout()
+            st.session_state.clear()
+            st.warning("一定時間操作がなかったため、自動ログアウトされました。")
+            st.rerun()
+
+
     if current_user:
         st.header(f"こんにちは、{current_user['username']}さん")
         
@@ -67,6 +80,7 @@ def main():
             success, message = logout()
             if success:
                 st.success(message)
+                st.session_state.clear()
                 st.rerun()  # ページをリロード
             else:
                 st.error(message)
@@ -88,6 +102,7 @@ def main():
                     if success:
                         # セッションにユーザー情報を保存
                         st.session_state["user"] = result
+                        st.session_state["login_time"] = datetime.now()  # ← 追加
                         st.success("ログインしました！")
                         st.rerun()  # ページをリロード
                     else:

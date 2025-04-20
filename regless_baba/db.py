@@ -16,7 +16,7 @@ def init_db():
     """
     try:
         result = supabase.table("users").select("id").limit(1).execute()
-        st.success("✅ Supabaseへの接続成功")
+        st.write("")
         return True
     except Exception as e:
         st.error(f"❌ Supabase接続エラー: {e}")
@@ -164,3 +164,22 @@ def update_want(want_id, updates):
         print(f"更新エラー: {e}")
         return None
 
+def has_liked(user_id: str, want_id: int) -> bool:
+    """そのユーザーが既に like を付けているか"""
+    resp = supabase.table("likes") \
+        .select("id", count="exact") \
+        .eq("want_id", want_id) \
+        .eq("user_id", user_id) \
+        .execute()
+    return (resp.count or 0) > 0
+
+
+def remove_like(user_id: str, want_id: int):
+    """
+    いいねを取り消し（削除）
+    """
+    return supabase.table("likes") \
+        .delete() \
+        .eq("user_id", user_id) \
+        .eq("want_id", want_id) \
+        .execute()
