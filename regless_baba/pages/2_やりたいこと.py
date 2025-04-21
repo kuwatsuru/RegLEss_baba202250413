@@ -55,7 +55,7 @@ def app():
 
     # ★③ 入力欄にセッション値を反映
     cost = st.number_input(
-        "費用（円）",
+        "費用（万円）",
         min_value=0,
         value=int(st.session_state.get("cost", 0) or 0),  # int変換エラー防止
         key="cost_input"
