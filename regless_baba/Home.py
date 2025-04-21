@@ -30,7 +30,22 @@ def main():
     components.html(
         """
         <div style='text-align:center;'>
-            <p><span style='color:black; font-size:100px; font-family:Courier'>RegLess</span></p>
+            <p>          
+            <span
+            style='
+              font-family:Courier;
+              font-size:100px;
+              color:black;
+              /* 白い縁取り（0.1px）*/
+              -webkit-text-stroke:0.1px white;
+              /* 非WebKitでも効くように多重シャドウで白線を再現 */
+              text-shadow:
+                -2px -2px 0 white,
+                 2px -2px 0 white,
+                -2px  2px 0 white,
+                 2px  2px 0 white;
+            '
+          >RegLess</span></p>
         </div>
         """
     )
@@ -39,14 +54,36 @@ def main():
     components.html(
         """
         <head>
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap" rel="stylesheet">
-            <style>
-                @keyframes fadeInUp { 0% { opacity:0; transform:translateY(30px);} 100% { opacity:1; transform:translateY(0);} }
-                .fade-in-text { font-family:'Noto Sans JP',sans-serif; font-size:36px; font-weight:500; color:#333; text-align:center; animation:fadeInUp 1.2s ease-out both; }
-            </style>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500&display=swap"
+            rel="stylesheet"
+        >
+        <style>
+            @keyframes fadeInUp {
+            0%   { opacity:0; transform:translateY(30px); }
+            100% { opacity:1; transform:translateY(0); }
+            }
+            .fade-in-text {
+            font-family:'Noto Sans JP',sans-serif;
+            font-size:36px;
+            font-weight:500;
+            /* 背景が暗い前提で文字色は黒、縁取りを白に */
+            color:black;
+            -webkit-text-stroke:0.1px white;
+            text-shadow:
+                -1px -1px 0 white,
+                1px -1px 0 white,
+                -1px  1px 0 white,
+                1px  1px 0 white;
+            text-align:center;
+            animation:fadeInUp 1.2s ease-out both;
+            }
+        </style>
         </head>
         <body>
-            <div class="fade-in-text">- 残された人生に 後悔のない毎日を -</div>
+        <div class="fade-in-text">
+            - 残された人生に 後悔のない毎日を -
+        </div>
         </body>
         """
     )
