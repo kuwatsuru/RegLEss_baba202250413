@@ -108,7 +108,7 @@ def main():
                     else:
                         st.write("未登録の場合は”新規登録”から登録を行ってください。")
                         st.error(result)
-                        
+                    
         
         with tab2:
             st.subheader("新規登録")
@@ -159,6 +159,7 @@ def main():
                     if success:
                         st.success(message)
                         st.info("ログインページからログインしてください")
+                        st.rerun()  # ページをリロード    
                     else:
                         st.error(message)
 

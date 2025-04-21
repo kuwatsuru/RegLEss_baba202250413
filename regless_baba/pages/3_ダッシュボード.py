@@ -17,9 +17,15 @@ def app():
     username = current_user["username"]
     st.write(f"こんにちは、{username}さん")
 
+    # ─── 1-2. 寿命表示 ───
+    estimated_lifespan = current_user.get("estimated_lifespan")
+    if estimated_lifespan is not None:
+        st.subheader(f"推定残り寿命: {estimated_lifespan} 年")
+        st.write("")
+
 
     # ─── 2. 登録済みリストの取得と表示 ───
-    st.subheader("あなたのやりたいこと一覧")
+    st.header("あなたのやりたいこと一覧")
     wants_list = get_wants_by_user(user_id)
     if not wants_list:
         st.info("まだやりたいことが登録されていません。")
@@ -41,7 +47,7 @@ def app():
         col1, col2, col3 = st.columns([2, 1, 1])
 
         with col1:
-            st.write(f"**{title}**")
+            st.subheader(f"**{title}**")
             st.write(f"{deadline}")
             st.write(f"費用：{cost}万円")
             st.write(f" 期間：{period}")
@@ -76,6 +82,7 @@ def app():
                         st.rerun()
                     else:
                         st.error("更新に失敗しました")
+            st.write("")
 
         with col2:
             st.progress(1.0 if is_completed else 0.0)
@@ -84,23 +91,20 @@ def app():
             if not is_completed:
                 if st.button("完了", key=f"complete_{want_id}"):
                     complete_want(want_id)
-                    st.success(f"{title} を完了にしますか？")
                     st.rerun()
             else:
-                st.write("✅ 完了済み")
+                st.write("✅ 達成済み")
 
         if is_completed:
             completed_count += 1
 
 
-    # ─── 4. 全体進捗・残り寿命表示 ───
-    st.subheader("全体進捗")
-    completion_ratio = completed_count / total_wants
-    st.write(f"完了率: {completion_ratio * 100:.1f}%")
+    # ─── 4. 全体進捗表示 ───
 
-    estimated_lifespan = current_user.get("estimated_lifespan")
-    if estimated_lifespan is not None:
-        st.write(f"推定残り寿命: {estimated_lifespan} 年")
+    completion_ratio = completed_count / total_wants
+    st.subheader(f"完了率: {completion_ratio * 100:.1f}%")
+
+
 
 if __name__ == "__main__":
     app()
