@@ -43,7 +43,7 @@ def app():
         with col1:
             st.write(f"**{title}**")
             st.write(f"{deadline}")
-            st.write(f"費用：{cost}円")
+            st.write(f"費用：{cost}万円")
             st.write(f" 期間：{period}")
             st.write(f"アクション：{first_step}")
             st.write(f"タグ：{tag}")
