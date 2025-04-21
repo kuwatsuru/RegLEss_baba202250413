@@ -35,15 +35,6 @@ def main():
             style='
               font-family:Courier;
               font-size:100px;
-              color:black;
-              /* 白い縁取り（0.1px）*/
-              -webkit-text-stroke:0.1px white;
-              /* 非WebKitでも効くように多重シャドウで白線を再現 */
-              text-shadow:
-                -2px -2px 0 white,
-                 2px -2px 0 white,
-                -2px  2px 0 white,
-                 2px  2px 0 white;
             '
           >RegLess</span></p>
         </div>
@@ -67,14 +58,6 @@ def main():
             font-family:'Noto Sans JP',sans-serif;
             font-size:36px;
             font-weight:500;
-            /* 背景が暗い前提で文字色は黒、縁取りを白に */
-            color:black;
-            -webkit-text-stroke:0.1px white;
-            text-shadow:
-                -1px -1px 0 white,
-                1px -1px 0 white,
-                -1px  1px 0 white,
-                1px  1px 0 white;
             text-align:center;
             animation:fadeInUp 1.2s ease-out both;
             }
