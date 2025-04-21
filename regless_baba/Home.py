@@ -35,7 +35,9 @@ def main():
             style='
               font-family:Courier;
               font-size:100px;
+              text-shadow: 0 0 10px rgba(255,255,255,0.5);
             '
+
           >RegLess</span></p>
         </div>
         """
@@ -59,6 +61,7 @@ def main():
             font-size:36px;
             font-weight:500;
             text-align:center;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
             animation:fadeInUp 1.2s ease-out both;
             }
         </style>
