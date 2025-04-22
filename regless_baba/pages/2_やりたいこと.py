@@ -52,7 +52,7 @@ def app():
                         st.session_state["first_step"] = value
                     elif key == "タグ": # タグも追加
                         st.session_state["tag"] = value
-            st.success("AIサジェストをフォームに反映しました！")
+            #st.success("AIサジェストをフォームに反映しました！")
 
     st.write("**費用、期間、最初のステップを手動で入力する場合**")
 
