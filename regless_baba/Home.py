@@ -8,7 +8,7 @@ import streamlit.components.v1 as components
 from PIL import Image
 import datetime
 from auth import login, signup, logout, get_current_user
-from life_calc import calculate_remaining_life
+from life_calc import calculate_remaining_life, get_random_message
 
 def main():
     # DB 初期化関数を遅延インポート（st.cache_resource 呼び出しより後）
@@ -35,7 +35,7 @@ def main():
             style='
               font-family:Courier;
               font-size:100px;
-              text-shadow: 0 0 10px rgba(255,255,255,0.5);
+              text-shadow: 0 0 10px rgba(255,255,255,2);
             '
 
           >RegLess</span></p>
@@ -61,7 +61,7 @@ def main():
             font-size:36px;
             font-weight:500;
             text-align:center;
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            text-shadow: 0 0 10px rgba(255,255,255,1);
             animation:fadeInUp 1.2s ease-out both;
             }
         </style>
@@ -99,6 +99,21 @@ def main():
 
     if current_user:
         st.header(f"こんにちは、{current_user['username']}さん")
+
+        # --- ログイン成功後に残り寿命メッセージを表示 ---
+        # current_user (ユーザー情報) に 'estimated_life' キーが含まれていると仮定
+        estimated_life = current_user.get("estimated_lifespan")# キーが存在しない場合を考慮
+
+        if estimated_life is not None:
+            # 残り寿命からランダムメッセージを取得
+            life_message = get_random_message(estimated_life)
+            # メッセージを表示 (例としてst.infoを使用)
+            st.subheader(life_message)
+            st.write("")
+        else:
+            # estimated_life がユーザー情報に含まれていない場合の処理
+            st.warning("ユーザーの推定寿命情報が見つかりません。プロフィールを更新してください。")
+        ###
         
         if st.button("ログアウト"):
             success, message = logout()
