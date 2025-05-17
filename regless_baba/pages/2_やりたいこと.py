@@ -1,6 +1,6 @@
 import streamlit as st
 from db import insert_want, get_user_by_username
-from ai_suggest import suggest_ideas, suggest_ideas_with_all_users_rag
+from logic.ai_suggest import suggest_ideas, suggest_ideas_with_all_users_rag
 from datetime import date, timedelta #期限設定用
 from auth import get_current_user
 import time

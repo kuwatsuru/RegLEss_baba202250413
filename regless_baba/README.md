@@ -8,7 +8,8 @@ regless/
 │   ├── 3_ダッシュボード.py         # ダッシュボードページ
 │   └── 4_みんなのやりたいこと.py         # コミュニティ機能ページ
 ├── db.py                    # DB関連処理（初期化、CRUDなど）
-├── life_calc.py         # 残り寿命を計算するモジュール
-├── ai_suggest.py             # AIサジェスト（GPT API）関連
+├── logic/
+│   ├── ai_suggest.py             # AIサジェスト（GPT API）関連
+│   └─── life_calc.py         # 残り寿命を計算するモジュール
 ├── requirements.txt         # 必要パッケージ一覧
 └── README.md                # 簡易説明

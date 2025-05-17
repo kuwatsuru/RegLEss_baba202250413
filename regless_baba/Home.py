@@ -8,7 +8,7 @@ import streamlit.components.v1 as components
 from PIL import Image
 import datetime
 from auth import login, signup, logout, get_current_user
-from life_calc import calculate_remaining_life, get_random_message
+from logic.life_calc import calculate_remaining_life, get_random_message
 
 def main():
     # DB 初期化関数を遅延インポート（st.cache_resource 呼び出しより後）
